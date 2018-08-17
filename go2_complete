@@ -9,16 +9,18 @@ _go2_completions()
 		return
 	fi
 
-	local suggestions=($(compgen -W "$(cat ~/.config/nickname/nickname.conf | cut -d',' -f1)" -- "${COMP_WORDS[1]}"))
-
-	if [ "${#suggestions[@]}" == "1" ]
+	if [ -e ~/.config/nickname/nickname.conf ]
 	then
-		local word=$(echo ${suggestions[0]/%\ */})
-		COMPREPLY=("word")
-	else
-		COMPREPLY=("${suggestions[@]}")
-	fi
+		local suggestions=($(compgen -W "$(cat ~/.config/nickname/nickname.conf | cut -d',' -f1)" -- "${COMP_WORDS[1]}"))
 
+		if [ "${#suggestions[@]}" == "1" ]
+		then
+			local word=$(echo ${suggestions[0]/%\ */})
+			COMPREPLY=("word")
+		else
+			COMPREPLY=("${suggestions[@]}")
+		fi
+	fi
 
 }
 
