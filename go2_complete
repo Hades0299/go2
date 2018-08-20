@@ -16,7 +16,7 @@ _go2_completions()
 		if [ "${#suggestions[@]}" == "1" ]
 		then
 			local word=$(echo ${suggestions[0]/%\ */})
-			COMPREPLY=("word")
+			COMPREPLY=("$word")
 		else
 			COMPREPLY=("${suggestions[@]}")
 		fi
