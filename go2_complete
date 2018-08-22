@@ -3,15 +3,26 @@
 
 _go2_completions()
 {
+	local cur="${COMP_WORDS[COMP_CWORD]}"
 
-	if [ "${#COMP_WORDS[@]}" != 2 ]
+	# Catch the Options, that accept no params
+	if [ "$cur" == "-h" -o "$cur" == "-p" ]
 	then
 		return
 	fi
 
-	if [ -e ~/.config/nickname/nickname.conf ]
+	# Do if we only have one word, that is a nickname
+	if [ "${#COMP_WORDS[@]}" == 2 ]
 	then
-		local suggestions=($(compgen -W "$(cat ~/.config/nickname/nickname.conf | cut -d',' -f1)" -- "${COMP_WORDS[1]}"))
+		if [ -e ~/.config/nickname/nickname.conf ]
+		then
+			local pos=("$(cat ~/.config/nickname/nickname.conf | cut -d',' -f1)")
+			local suggestions=($(compgen -W "${pos} -n -h -p" -- "${COMP_WORDS[1]}"))
+		else
+			local suggestion=("")
+		fi
+
+
 
 		if [ "${#suggestions[@]}" == "1" ]
 		then
@@ -19,7 +30,8 @@ _go2_completions()
 			COMPREPLY=("$word")
 		else
 			COMPREPLY=("${suggestions[@]}")
-		fi
+		fi	
+		
 	fi
 
 }
